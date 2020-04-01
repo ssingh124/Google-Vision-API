@@ -84,7 +84,7 @@ margin-top:500px;
 	  
 		
 		let apikey = '*****************************';
-		
+	
 		// extract image as base64, scale it down to reduce data transfer speed	  
 	  var scale = 0.25;
 	  var canvas = document.createElement("canvas");
@@ -97,7 +97,8 @@ margin-top:500px;
           var dataUrl = canvas.toDataURL();
 
 	  // Send image to google to analyze
-	  fetch(`https://vision.googleapis.com/v1/images:annotate?key=${apikey}`, {
+	  fetch(`https://vision.googleapis.com/v1/images:annotate?key=${apikey}`, 
+      {
 	      method: 'POST',
 	      headers: {
 		  'Content-Type': 'application/json'
@@ -106,6 +107,8 @@ margin-top:500px;
 		  requests: [
 		      {
 			  features: {
+                  //Is going to detect Landmarks to detect
+                  // we can also use other features here as well such as: OCR and Face
 				  type: 'LANDMARK_DETECTION'
 			  },
 			  image: {
@@ -116,8 +119,11 @@ margin-top:500px;
 		  ]
 	      })
 	  }).then( resp => {
+
 	      return resp.json();
+
 	  }).then( json => {
+
 	      // Simply output the response
 	      console.log(json);
 	      results.innerHTML = '';
@@ -126,7 +132,7 @@ margin-top:500px;
 		  let description = document.createElement('span');
 		  let score = document.createElement('span');
 		  let div = document.createElement('div');
-
+        // Appending data to HTML
 		  description.innerText = annotation.description;
 		  score.innerText = annotation.score;
 		  div.append(description,score);
